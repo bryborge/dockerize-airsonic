@@ -28,9 +28,9 @@ services:
     restart: always
     volumes:
       - ./config:/config
-      - /media/nas/music:/music
-      - /media/nas/podcasts:/podcasts
-      - /media/nas/playlists:/playlists
+      - /media/nas/Music:/music
+      - /media/nas/Podcasts:/podcasts
+      - /media/nas/Audiobooks:/sudiobooks
 
 networks:
   traefik_proxy:
