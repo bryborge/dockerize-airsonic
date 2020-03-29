@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  airsonic:
+    container_name: airsonic
+    image: airsonic/airsonic:10.5.0-RELEASE
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.custom.headers.browserXSSFilter=true"
+      - "traefik.http.middlewares.custom.headers.contentTypeNosniff=true"
+      - "traefik.http.middlewares.custom.headers.forceSTSHeader=true"
+      - "traefik.http.middlewares.custom.headers.frameDeny=true"
+      - "traefik.http.middlewares.custom.headers.sslredirect=true"
+      - "traefik.http.middlewares.custom.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.custom.headers.stsPreload=true"
+      - "traefik.http.middlewares.custom.headers.stsSeconds=315360000"
+      - "traefik.http.routers.airsonic.entrypoints=websecure"
+      - "traefik.http.routers.airsonic.rule=Host(`airsonic.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.airsonic.tls.certresolver=letsencrypt"
+    networks:
+      - traefik_proxy
+    ports:
+      - 1000:1000
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /media/nas/music:/airsonic/music:z
+      - /media/nas/podcasts:/airsonic/podcasts:z
+      - /media/nas/playlists:/airsonic/playlists:z
+
+networks:
+  traefik_proxy:
+    external: true
