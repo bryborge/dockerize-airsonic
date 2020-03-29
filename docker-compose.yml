@@ -3,6 +3,10 @@ version: "3"
 services:
   airsonic:
     container_name: airsonic
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     image: airsonic/airsonic:10.5.0-RELEASE
     labels:
       - "traefik.enable=true"
@@ -20,13 +24,13 @@ services:
     networks:
       - traefik_proxy
     ports:
-      - 1000:1000
+      - 4040:4040
     restart: always
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /media/nas/music:/airsonic/music:z
-      - /media/nas/podcasts:/airsonic/podcasts:z
-      - /media/nas/playlists:/airsonic/playlists:z
+      - ./config:/config
+      - /media/nas/music:/music
+      - /media/nas/podcasts:/podcasts
+      - /media/nas/playlists:/playlists
 
 networks:
   traefik_proxy:
